@@ -11,7 +11,7 @@ app.use(express.json());
 //geting all itens for home page
 app.get('/',userControllers.getitems);
 
-
+//creating new users
 app.post('/createuser',userControllers.createuser);
 
 

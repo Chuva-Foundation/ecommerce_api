@@ -23,12 +23,7 @@ const userSchema = Joi.object({
     birth:Joi.date()
     .min('1-1-1920')
     .max('1-1-2004')
-    .required(),
-
-    phone:Joi.number()
-    .min(7)
-    .required()
-    
+    .required(), 
 });
 
 
