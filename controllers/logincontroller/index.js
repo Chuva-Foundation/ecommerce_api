@@ -1,6 +1,7 @@
 const {loginSchema} =require('./../../config/shemas');
 const userModel = require('./../../model/usermodel');
 const userValidation = require('./../../model/usermodel/uservalidation');
+const jwt = require('jsonwebtoken');
 
 //user login
 exports.login = async (req,res)=>{
@@ -23,9 +24,11 @@ exports.login = async (req,res)=>{
     }
 
     //geting user id
-    const userID = await userModel.userID(userInfo.email)
+    const user = await userModel.userID(userInfo.email)
 
-   // const token = await 
-
-    res.status(202).json(userID)
+    //responding whith the user info and token
+    res.status(202).json({
+        userinfo:user,
+        token:jwt.sign({ id:user.id},process.env.AUTH_KEY ||"068de8abbe69afe5dfc965aa16af93772a3eb2ab",{expiresIn: '1d'})
+    })
 }
