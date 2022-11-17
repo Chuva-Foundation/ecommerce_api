@@ -1,0 +1,29 @@
+{
+  "name": "ecomerceapi",
+  "version": "1.0.0",
+  "description": "ecomerce api for chuva academy final project",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chuva-Foundation/ecommerce_api.git"
+  },
+  "author": "Jaylson Almeida",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chuva-Foundation/ecommerce_api/issues"
+  },
+  "homepage": "https://github.com/Chuva-Foundation/ecommerce_api#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "joi": "^17.7.0",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.20",
+    "pg": "^8.8.0"
+  }
+}
