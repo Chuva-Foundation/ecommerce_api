@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
-const userControllers = require('./controllers/usercontroller')
+const userControllers = require('./controllers/usercontroller');
+const loginControllers = require('./controllers/logincontroller');
  
 
 const app = express();
@@ -14,11 +15,7 @@ app.get('/',userControllers.getitems);
 //creating new users
 app.post('/createuser',userControllers.createuser);
 
-
-
-
-
-
+app.post('/login',loginControllers.login);
 
 app.listen(port,()=>{
     console.log('Server listening');

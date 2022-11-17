@@ -10,10 +10,7 @@ class publicModel{
             console.log(error);
         }
     }
-
-
 }
-
 
 module.exports = publicModel;
 

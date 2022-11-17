@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
-const userSchema = Joi.object({
+
+exports.userSchema = Joi.object({
     first_name: Joi.string()
         .min(3)
         .max(20)
@@ -27,7 +28,7 @@ const userSchema = Joi.object({
 });
 
 
-const loginshema = Joi.object({
+exports.loginSchema = Joi.object({
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net','cv'] } })
         .required(),
@@ -37,4 +38,4 @@ const loginshema = Joi.object({
         .required()
 });
 
-module.exports= userSchema
+
