@@ -11,7 +11,7 @@ const { response } = require('express');
 exports.getitems = async (req,res) =>{
     const items = await  publicModel.getitems();
     //console.log(items)
-    res.status(200).json(items)
+    res.status(200).json(items);
 
 }
 
@@ -64,6 +64,18 @@ exports.neworder = async (req,res) =>{
     }
     */
     res.json(neworder);
+}
 
-    
+exports.getsingleorder = async (req,res)=>{
+    const orderId =req.params.orderId;
+    //console.log(orderId)
+
+    const  getSingleOrder = await userModel.getSingleOrder(orderId)
+
+    const products = {
+        "product_id":getSingleOrder.products[0],
+        "quantity":getSingleOrder.products[1],
+        "price":getSingleOrder.products[2]
+    }
+    res.status(200).json(products)
 }

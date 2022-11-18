@@ -17,13 +17,16 @@ app.get('/',userControllers.getitems);
 app.post('/createuser',userControllers.createuser);
 //user login
 app.post('/login',loginControllers.login);
-
+//making order
 app.post('/buy/:clientId/neworder',userControllers.neworder)
+
+//makin single order
+app.get('/order/:orderId',userControllers.getsingleorder)
+
 //private routes
 app.use(auth)
 
 
-//making order
 app.listen(port,()=>{
     console.log('Server listening');
 });

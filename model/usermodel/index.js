@@ -27,7 +27,7 @@ class userModel {
         }
         
     }
-
+    //seting new order
     static async neworder(user_id,product_id,quantity,price_unit){
         //converting order in array format
         const products_ordered = [product_id,quantity,price_unit];
@@ -68,6 +68,19 @@ class userModel {
             throw error
           }
     }
+
+    //geting single order
+    static async getSingleOrder(orderId){
+        try {
+            const order = await db.query("SELECT products FROM order_products WHERE order_id=$1",[orderId]);
+            return order.rows[0]
+        } catch (error) {
+            
+        }
+
+    }
+
+
 }
 
 module.exports = userModel
