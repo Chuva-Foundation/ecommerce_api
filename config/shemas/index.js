@@ -38,4 +38,23 @@ exports.loginSchema = Joi.object({
         .required()
 });
 
+exports.orderschema = Joi.object({
+    user_id: Joi.number().greater(0)
+        .integer()
+        .positive()
+        .required(),
 
+    product_id: Joi.number()
+        .integer()
+        .positive()
+        .required(),
+    quantity: Joi.number().greater(0)
+        .required()
+        .positive()
+        .integer(),
+    price_unit: Joi.number().greater(0)
+        .required()
+        .positive()
+        .integer()
+          
+});

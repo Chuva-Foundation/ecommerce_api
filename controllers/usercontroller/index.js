@@ -1,7 +1,8 @@
-const {userSchema} =require('./../../config/shemas');
+const {userSchema, orderschema} =require('./../../config/shemas');
 const userModel = require('./../../model/usermodel');
 const userValidation = require('./../../model/usermodel/uservalidation');
 const publicModel = require('./../../model/publicmodel');
+const { response } = require('express');
 
 
 
@@ -31,4 +32,38 @@ exports.createuser = async (req,res)=>{
     //console.log(newuser);
     res.status(201).json(newuser);
     //const user = await userModel
+}
+
+
+exports.neworder = async (req,res) =>{
+    //geting userID
+    const userID =req.params.clientId;
+    //console.log(userID);
+
+    //geting the order and validate it
+    const orderInfo = await orderschema.validateAsync(req.body);
+    //console.log(orderInfo);
+
+    //insert the data into the orders
+    const neworder = await userModel.neworder(userID,orderInfo.product_id,orderInfo.quantity,orderInfo.price_unit)
+
+    //error message more accurate
+    /*
+    if(neworder=="Product do not exist!"){
+
+        res.status(500).json("Could not create order, Product do not exist");
+        throw neworder;
+    }else{
+        res.json(neworder);
+    }
+    if (neworder=="Product is not available!"){
+        res.status(500).json("Could not create order, Product is not available");
+        throw neworder;
+    }else{
+        res.json(neworder);
+    }
+    */
+    res.json(neworder);
+
+    
 }

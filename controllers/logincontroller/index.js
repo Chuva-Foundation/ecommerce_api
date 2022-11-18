@@ -1,7 +1,7 @@
 const {loginSchema} =require('./../../config/shemas');
+const jwt = require('jsonwebtoken');
 const userModel = require('./../../model/usermodel');
 const userValidation = require('./../../model/usermodel/uservalidation');
-const jwt = require('jsonwebtoken');
 
 //user login
 exports.login = async (req,res)=>{
