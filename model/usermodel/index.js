@@ -8,6 +8,7 @@ class userModel {
         
         //inserting user data
         try {
+            
            const userId = await db.query("INSERT INTO users (first_name,last_name,email,password,birth) VALUES ($1,$2,$3,$4,$5) RETURNING id",[first_name,last_name,email,passwordhash,birth]);
             return userId.rows[0]; 
         } catch (error) {
@@ -28,61 +29,77 @@ class userModel {
         
     }
     //seting new order
-    static async neworder(user_id,product_id,quantity,price_unit){
-        //converting order in array format
-        const products_ordered = [product_id,quantity,price_unit];
-        //console.log("products ordered:"+products_ordered);
-
+    static async neworder(clienteId,order){
+        
+        const length = Object.keys(order).length;
+        
         //validate if products exist and if it is available 
-        try {
-            //validate if product exists
-            const productExist = await db.query("SELECT name FROM products WHERE id=$1",[product_id]);
-            if(!productExist.rows[0]){
-                const message = "Product do not exist!";
-                return message
+        for (let x = 0; x <length; x++) { 
+            const singleorder = order[x];
+            try {
+                //validate if product exists
+                const productExist = await db.query("SELECT name FROM products WHERE id=$1",[singleorder.product_id]);
+                if(!productExist.rows[0]){
+                    const message = `Product id ${singleorder.product_id} do not exist!`;
+                    return message
+                }
+                //validate if product is available
+                const productAvailable = await db.query("SELECT status FROM products WHERE id=$1",[singleorder.product_id]);
+                
+                if (productAvailable.rows[0]==false) {
+                    return message
+                }
+                    const message = "Product is not available!"
+            } catch (error) {
+                console.log(error)
             }
-            //validate if product is available
-            const productAvailable = await db.query("SELECT status FROM products WHERE id=$1",[product_id]);
-
-            if (productAvailable.rows[0]==false) {
-                const message = "Product is not available!"
-                return message
-            }
-        } catch (error) {
-            console.log(error)
         }
         
+        //inserting all products  
         try {
             await db.query('BEGIN')
-            const newOrder = await db.query("INSERT INTO orders(user_id) VALUES($1) RETURNING id", [user_id])
-            //console.log("order ID:"+newOrder.rows[0].id);
-
-            //inserting the products ordered by user
-            await db.query("INSERT INTO order_products(order_id, products) VALUES ($1, $2)", [newOrder.rows[0].id,products_ordered])
-            
+            //inserting order
+            const newOrder = await db.query("INSERT INTO orders(user_id) VALUES($1) RETURNING id", [clienteId])
+            //inserting products
+            for (let y = 0; y < length; y++){
+                const products = order[y];
+                //console.log(products)
+                const productsarray =[products.product_id,products.quantity,products.price_unit]
+                console.log(productsarray)
+                //inserting the products ordered by user
+                await db.query("INSERT INTO order_products(order_id, products) VALUES ($1, $2)", [newOrder.rows[0].id,productsarray])  
+            }
             await db.query('COMMIT');
             return newOrder.rows[0];
-          } catch (error) {
-            console.log(error)
-            await db.query('ROLLBACK');
-            throw error
-          }
+        } catch (error) {
+                console.log(error)
+                await db.query('ROLLBACK');
+                throw error
+            }
     }
 
     //geting single order
     static async getSingleOrder(orderId){
         try {
+            //const products =[];
             const order = await db.query("SELECT products FROM order_products WHERE order_id=$1",[orderId]);
-            return order.rows[0]
+
+            return order.rows
         } catch (error) {
             
         }
-
     }
-
-
+    //getting all orders
+    static async getAllOrders(userId){
+        
+        try {
+            const orders = await db.query("SELECT id FROM orders WHERE user_id=$1",[userId]);
+            
+            return orders.rows
+        } catch (error) {
+             console.log(error) 
+        }
+    }
 }
 
 module.exports = userModel
-
-

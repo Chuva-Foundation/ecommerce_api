@@ -1,8 +1,8 @@
 const express = require('express');
 require('dotenv').config();
+const auth = require('./middleware/auth');
 const userControllers = require('./controllers/usercontroller');
 const loginControllers = require('./controllers/logincontroller');
-const auth = require('./middleware/auth');
  
 
 const app = express();
@@ -14,18 +14,25 @@ app.use(express.json());
 app.get('/',userControllers.getitems);
 
 //creating new users
-app.post('/createuser',userControllers.createuser);
+app.post('/sign',userControllers.createuser);
+
 //user login
 app.post('/login',loginControllers.login);
-//making order
-app.post('/buy/:clientId/neworder',userControllers.neworder)
 
-//makin single order
-app.get('/order/:orderId',userControllers.getsingleorder)
+//making order
+app.post('/buy/:clientId/neworders',userControllers.neworder)
+
+
+//geting all orders
+app.get('/:clientId/orders',userControllers.getalloders)
+
+//getingsingle order
+app.get('/:clientId/orders/:orderId',userControllers.getsingleorder)
+
+//
 
 //private routes
 app.use(auth)
-
 
 app.listen(port,()=>{
     console.log('Server listening');
