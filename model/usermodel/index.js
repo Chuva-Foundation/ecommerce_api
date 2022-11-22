@@ -8,9 +8,9 @@ class userModel {
         
         //inserting user data
         try {
-            
            const userId = await db.query("INSERT INTO users (first_name,last_name,email,password,birth) VALUES ($1,$2,$3,$4,$5) RETURNING id",[first_name,last_name,email,passwordhash,birth]);
-            return userId.rows[0]; 
+           
+           return userId.rows[0]; 
         } catch (error) {
             console.log(error);
         }
@@ -22,6 +22,7 @@ class userModel {
 
         try {
             const userID = await db.query("SELECT id,first_name,last_name FROM users WHERE email=$1",[email]); 
+            
             return userID.rows[0];
         } catch (error) {
             console.log(error);
@@ -36,6 +37,7 @@ class userModel {
         //validate if products exist and if it is available 
         for (let x = 0; x <length; x++) { 
             const singleorder = order[x];
+
             try {
                 //validate if product exists
                 const productExist = await db.query("SELECT name FROM products WHERE id=$1",[singleorder.product_id]);
@@ -46,26 +48,34 @@ class userModel {
                 //validate if product is available
                 const productAvailable = await db.query("SELECT status FROM products WHERE id=$1",[singleorder.product_id]);
                 
-                if (productAvailable.rows[0]==false) {
+                if (productAvailable.rows[0].status==false) {
+                    const message = "Product is not available!"
                     return message
                 }
-                    const message = "Product is not available!"
             } catch (error) {
                 console.log(error)
             }
         }
-        
+        //getting total price
+        let totalPrice = 0;
+        for (let z = 0; z < length; z++) {
+            const products =order[z]
+            const price = products.quantity * Number(products.price_unit)
+            totalPrice += price 
+        }
+        //console.log("finalprice "+totalPrice)
         //inserting all products  
-        try {
+        try {  
             await db.query('BEGIN')
             //inserting order
-            const newOrder = await db.query("INSERT INTO orders(user_id) VALUES($1) RETURNING id", [clienteId])
+            const newOrder = await db.query("INSERT INTO orders(user_id,total) VALUES($1,$2) RETURNING id", [clienteId,totalPrice])
             //inserting products
             for (let y = 0; y < length; y++){
                 const products = order[y];
                 //console.log(products)
                 const productsarray =[products.product_id,products.quantity,products.price_unit]
-                console.log(productsarray)
+                //console.log(productsarray)
+                
                 //inserting the products ordered by user
                 await db.query("INSERT INTO order_products(order_id, products) VALUES ($1, $2)", [newOrder.rows[0].id,productsarray])  
             }

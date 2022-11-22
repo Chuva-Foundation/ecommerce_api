@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS public.orders
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 43 START 43 MINVALUE 43 MAXVALUE 9999999999999 CACHE 1 ),
     user_id bigint NOT NULL,
+    total bigint NOT NULL,
+    date date NOT NULL DEFAULT CURRENT_DATE,
     CONSTRAINT orders_pkey PRIMARY KEY (id),
     CONSTRAINT user_id FOREIGN KEY (user_id)
         REFERENCES public.users (id) MATCH SIMPLE
@@ -35,6 +37,7 @@ CREATE TABLE IF NOT EXISTS public.orders
         ON DELETE NO ACTION
         NOT VALID
 )
+
 
 CREATE TABLE IF NOT EXISTS public.phones
 (
@@ -72,6 +75,7 @@ CREATE TABLE IF NOT EXISTS public.users
     email character varying(30) COLLATE pg_catalog."default" NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
     birth date NOT NULL,
+    isAdmin boolean NOT NULL DEFAULT false,
     CONSTRAINT products_pkey1 PRIMARY KEY (id),
     CONSTRAINT email UNIQUE (email)
 )

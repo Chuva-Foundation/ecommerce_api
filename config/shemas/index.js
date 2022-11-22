@@ -23,8 +23,7 @@ exports.userSchema = Joi.object({
     
     birth:Joi.date()
     .min('1-1-1920')
-    .max('1-1-2004')
-    .required(), 
+    .required() 
 });
 
 
@@ -38,7 +37,7 @@ exports.loginSchema = Joi.object({
         .required()
 });
 
-exports.orderschema = Joi.object({
+exports.orderSchema = Joi.object({
     user_id: Joi.number().greater(0)
         .integer()
         .positive()
@@ -57,4 +56,36 @@ exports.orderschema = Joi.object({
         .positive()
         .integer()
           
+});
+
+exports.updateSchema = Joi.object({
+    product_id: Joi.number()
+        .required()
+        .positive()
+        .integer(),
+    status: Joi.boolean()
+        .required(),
+    price: Joi.number()
+        .positive()
+        .required()
+
+});
+
+exports.itemsSchema = Joi.object({
+    name: Joi.string()
+        .required()
+        .min(5)
+        .max(50),
+    price: Joi.number()
+        .positive()
+        .required()
+        .integer(),
+    status: Joi.boolean()
+        .required(),
+    category_id: Joi.number()
+        .required()
+        .positive()
+        .integer()
+        
+        
 });
