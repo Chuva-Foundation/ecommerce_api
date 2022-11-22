@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 class userValidation {
     static async emailValidation(email){
         //databse email verification
-
         try {
             const checkemail = await db.query("SELECT id FROM users WHERE email=$1",[email]);
             //console.log(checkemail.rows)
@@ -30,21 +29,14 @@ class userValidation {
             }else{
                 return true;
             }
-        } catch (error) {
-            
-        }
-        //const passwordhash = await bcrypt.hash(password,6);
-        //const wordhash = await bcrypt.hash(password,6);
-        
-        
-
-        
+        } catch (error) {    
+        }       
     }  
 
-    static async statusValidation (email){
-        const statuscheck = await db.query("SELECT status FROM users WHERE email=$1",[email]);
-
-        if (!statuscheck.rows[0]) {
+    static async isadminValidation (email){
+        const statuscheck = await db.query("SELECT isadmin FROM users WHERE email=$1",[email]);
+        
+        if (statuscheck.rows[0].isadmin==false) {
             return false;
         }else{
             return true;

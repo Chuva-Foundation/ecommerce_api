@@ -12,7 +12,7 @@
     "url": "git+https://github.com/Chuva-Foundation/ecommerce_api.git"
   },
   "author": "Jaylson Almeida",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Chuva-Foundation/ecommerce_api/issues"
   },

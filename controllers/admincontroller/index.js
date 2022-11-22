@@ -1,3 +1,4 @@
+const { response } = require('express');
 const {updateSchema,itemsSchema} =require('./../../config/shemas');
 const adminModel = require('./../../model/adminmodel');
 
@@ -5,8 +6,15 @@ const adminModel = require('./../../model/adminmodel');
     const userId = req.params.userId;
     const productId = req.params.itemsId;
     const productInfo = req.body;
-
-    const validatedInfo = updateSchema.validateAsync(productInfo);
+    
+    //validating schema
+    try {
+        const validatedInfo = updateSchema.validateAsync(productInfo);
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json(error.message)
+    }
     //console.log(validatedInfo)
     const updatedItem = await adminModel.updateItem(userId, productId,productInfo);
 
@@ -20,7 +28,14 @@ const adminModel = require('./../../model/adminmodel');
 exports.createproduct = async (req,res)=>{
     const userId = req.params.userId;
     const productInfo = req.body;
-    const productValidation = itemsSchema.validateAsync(productInfo);
+
+    try {
+        const productValidation = itemsSchema.validateAsync(productInfo);
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json(error.message);
+    }
 
     const product = await adminModel.createProduct(userId,productInfo);
 

@@ -14,9 +14,7 @@ class userModel {
         } catch (error) {
             console.log(error);
         }
-    
     }
-
     //geting user info whith email
     static async userID (email){
 
@@ -93,7 +91,11 @@ class userModel {
         try {
             //const products =[];
             const order = await db.query("SELECT products FROM order_products WHERE order_id=$1",[orderId]);
-
+            
+            if (!order.rows[0]) {
+                const message = `Order ${orderId} not found!`
+                return message
+            }
             return order.rows
         } catch (error) {
             
