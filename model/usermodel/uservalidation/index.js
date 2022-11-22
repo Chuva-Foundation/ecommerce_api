@@ -16,24 +16,40 @@ class userValidation {
                 return true;
             } 
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }   
     }
     //password verification
     static async passwordValidation (email,password){
-        const passwordcheck = await db.query("SELECT password FROM users WHERE email=$1",[email]);
+        try {
+            const passwordcheck = await db.query("SELECT password FROM users WHERE email=$1",[email]);
+            const passwordValidation = await bcrypt.compare(password,passwordcheck.rows[0].password);
+            
+            if(!passwordValidation){
+                return false;
+            }else{
+                return true;
+            }
+        } catch (error) {
+            
+        }
         //const passwordhash = await bcrypt.hash(password,6);
         //const wordhash = await bcrypt.hash(password,6);
         
         
-        const passwordValidation = await bcrypt.compare(password,passwordcheck.rows[0].password);
 
-        if(!passwordValidation){
-            return false
-        }else{
-            return true
-        }
+        
     }  
+
+    static async statusValidation (email){
+        const statuscheck = await db.query("SELECT status FROM users WHERE email=$1",[email]);
+
+        if (!statuscheck.rows[0]) {
+            return false;
+        }else{
+            return true;
+        }
+    }
 }
 
 module.exports = userValidation;
