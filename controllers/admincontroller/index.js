@@ -9,7 +9,7 @@ const adminModel = require('./../../model/adminmodel');
     
     //validating schema
     try {
-        const validatedInfo = updateSchema.validateAsync(productInfo);
+         await updateSchema.validateAsync(productInfo);
         
     } catch (error) {
         console.log(error);
@@ -30,7 +30,7 @@ exports.createproduct = async (req,res)=>{
     const productInfo = req.body;
 
     try {
-        const productValidation = itemsSchema.validateAsync(productInfo);
+        await itemsSchema.validateAsync(productInfo);
         
     } catch (error) {
         console.log(error);

@@ -22,8 +22,14 @@ exports.userSchema = Joi.object({
         .required(),
     
     birth:Joi.date()
-    .min('1-1-1920')
-    .required() 
+        .min('1-1-1920')
+        .required(),
+    phone: Joi.number()
+        .required()
+        .min(6),
+    adress: Joi.string()
+        .required()
+        .max(200) 
 });
 
 

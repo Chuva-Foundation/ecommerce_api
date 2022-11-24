@@ -16,6 +16,7 @@ class userValidation {
             } 
         } catch (error) {
             console.log(error);
+            return error.message;
         }   
     }
     //password verification
@@ -29,7 +30,9 @@ class userValidation {
             }else{
                 return true;
             }
-        } catch (error) {    
+        } catch (error) { 
+            console.log(error);
+            return error.message;   
         }       
     }  
 

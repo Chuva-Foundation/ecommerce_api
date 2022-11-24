@@ -1,6 +1,6 @@
-const { response } = require('express');
+
 const {orderSchema} =require('./../../config/shemas');
-const userModel = require('./../../model/usermodel');
+const clientModel = require('./../../model/clientmodel');
 
 
 exports.neworder = async (req,res) =>{
@@ -17,26 +17,25 @@ exports.neworder = async (req,res) =>{
        }
     } catch (error) {
         console.log(error);
-        return res.status(400).json(error.message);
+        return res.status(400).json({messageError:error.message});
     }
     
-    
+    try { 
     //insert the data into the orders
-    const neworder = await userModel.neworder(userId,order);
-    //error message more accurate
-    const message1 = "Product do not exist!"
-    if(neworder==message1){
+    const neworder = await clientModel.neworder(userId,order);
+    console.log(neworder)
 
-        res.status(500).json("Could not create order, Product do not exist");
-        
-    };
-    const message2 = "Product is not available!"
-    if (neworder==message2){
-        res.status(500).json("Could not create order, Product is not available");   
-    };
-    
-    
-    res.status(200).json(neworder);
+    //error message more accurate
+    if (typeof(neworder)=="object") {
+        res.status(200).json(neworder);
+    }else{
+        res.status(400).json({messageError:neworder});
+    }
+
+    } catch (error) {
+    console.log(error)
+    }
+
 }
 //
 exports.getsingleorder = async (req,res)=>{
@@ -44,16 +43,25 @@ exports.getsingleorder = async (req,res)=>{
     
     //console.log(orderId)
 
-    const  getSingleOrder = await userModel.getSingleOrder(orderId)
-
-    res.status(200).json(getSingleOrder);
+    const  getSingleOrder = await clientModel.getSingleOrder(orderId)
+    //console.log(typeof(getSingleOrder))
+    if (typeof(getSingleOrder)=="object") {
+        res.status(200).json(getSingleOrder);
+    }else{
+        res.status(400).json({ messageError:getSingleOrder});
+    }
 }
 
 
 exports.getalloders = async (req,res)=>{
     const userId=req.params.clientId;
     
-    const orders = await userModel.getAllOrders(userId);
+    const orders = await clientModel.getAllOrders(userId);
+    console.log("controllers: " + orders)
+    if (typeof(orders)=="object") {
+        res.status(200).json(orders);
+    }else{
+        res.status(400).json({messageError:orders});
+    }
 
-    res.status(200).json(orders)
 }

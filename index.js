@@ -3,7 +3,7 @@ require('dotenv').config();
 const app = express();
 const adminRoutes = require('./routes/adminRoutes');
 const publicRoutes = require('./routes/publicRoutes');
-const userRoutes = require('./routes/userRoutes')
+const clientRoutes = require('./routes/clientRoutes')
 
 app.use(express.json());
 const port =process.env.PORT
@@ -12,7 +12,7 @@ const port =process.env.PORT
 app.use(publicRoutes);
 
 //user Routes
-app.use(userRoutes);
+app.use(clientRoutes);
 
 //admin routes
 app.use(adminRoutes);

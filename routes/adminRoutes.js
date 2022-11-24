@@ -9,7 +9,7 @@ const routes = new Router();
 //admin login
 routes.post('/admin/login',loginControllers.adminlogin);
 
-routes.use(auth);
+//routes.use(auth);
 
 //get all items 
 routes.get('/admin/get/items',publicControllers.getitems)

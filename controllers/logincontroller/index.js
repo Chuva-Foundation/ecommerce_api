@@ -50,7 +50,6 @@ exports.adminlogin = async (req,res)=>{
         return res.status(400).json(error.message)     
     }
     
-    //email verification
     const emailcheck = await userValidation.emailValidation(email);
     
     //return messege if email not found
