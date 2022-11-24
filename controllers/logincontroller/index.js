@@ -47,14 +47,14 @@ exports.adminlogin = async (req,res)=>{
         
     } catch (error) {
         console.log(error);
-        return res.status(400).json(error.message)     
+        return res.status(400).json({messageError:error.message})     
     }
     
     const emailcheck = await userValidation.emailValidation(email);
     
     //return messege if email not found
     if(!emailcheck){
-        return res.status(404).json("Email not found!");
+        return res.status(404).json({messageError:"Email not found!"});
     }
 
     //validate authorization
@@ -63,14 +63,14 @@ exports.adminlogin = async (req,res)=>{
 
     const message = "You are not allowed to perfom this action!"
     if (status==false) {
-         return res.status(400).json(message);
+         return res.status(400).json({messageError:message});
     }
 
     //password verification
     const passwordcheck = await userValidation.passwordValidation(email,password);
 
     if(!passwordcheck){
-        return res.status(400).json("Password Invalid!");
+        return res.status(400).json({messageError:"Password Invalid!"});
     }
 
     

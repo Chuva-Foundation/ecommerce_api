@@ -18,11 +18,13 @@ const adminModel = require('./../../model/adminmodel');
     //console.log(validatedInfo)
     const updatedItem = await adminModel.updateItem(userId, productId,productInfo);
 
-    if (updatedItem=="You are not allowed to perfom this action!") {
-        res.status(500).json("You are not allowed to perfom this action!");
+    if (typeof(updatedItem)=="object") {
+        res.status(200).json(updatedItem);
+    }else{
+        res.status(500).json({messageError:updatedItem});
+
     }
 
-    res.status(200).json(updatedItem);
 }
 
 exports.createproduct = async (req,res)=>{
@@ -39,10 +41,11 @@ exports.createproduct = async (req,res)=>{
 
     const product = await adminModel.createProduct(userId,productInfo);
 
-    if (product=="You are not allowed to perfom this action!") {
-        res.status(500).json("You are not allowed to perfom this action!");
+    if (typeof(product)=="object") {
+        res.status(200).json(product);
+    }else{
+        res.status(500).json({message: product});
     }
 
-    res.status(200).json(product);
 
 }

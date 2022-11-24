@@ -82,7 +82,7 @@ static async getSingleOrder(orderId){
 static async getAllOrders(userId){
     
     try {
-        const orders = await db.query("SELECT id,total FROM orders WHERE user_id=$1",[userId]);
+        const orders = await db.query("SELECT id,total,date FROM orders WHERE user_id=$1",[userId]);
         
         if (!orders.rows[0]) {
            return "Order does not exist!" 
