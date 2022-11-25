@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS public.category
     name character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT products_pkey PRIMARY KEY (id),
     CONSTRAINT name UNIQUE (name)
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.products
 (
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.products
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.users
 (
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS public.users
     adress character varying(60) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT products_pkey1 PRIMARY KEY (id),
     CONSTRAINT email UNIQUE (email)
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.phones
 (
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS public.phones
         REFERENCES public.users (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-)
+);
 
 CREATE TABLE IF NOT EXISTS public.orders
 (
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS public.orders
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 
 
 CREATE TABLE IF NOT EXISTS public.order_products
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS public.order_products
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 
 
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS public.ratings
     user_id bigint NOT NULL,
     product_id bigint NOT NULL,
     CONSTRAINT ratings_pkey PRIMARY KEY (user_id, product_id)
-)
+);
 
 
 

@@ -6,18 +6,15 @@ const adminControllers = require('./../controllers/admincontroller');
 
 const routes = new Router();
 
-//admin login
-routes.post('/admin/login',loginControllers.adminlogin);
-
-//routes.use(auth);
+routes.use(auth);
 
 //get all items 
-routes.get('/admin/get/items',publicControllers.getitems)
+routes.get('/admin/items',publicControllers.getitems)
 //create products
-routes.post("/admin/post/:userId/create",adminControllers.createproduct);
+routes.post("/admin/create",adminControllers.createproduct);
 
 //updating products
-routes.put('/admin/put/:userId/update/:itemsId',adminControllers.updatingproducts);
+routes.put('/admin/update/:itemsId',adminControllers.updatingproducts);
 
 
 

@@ -4,14 +4,24 @@ const clientControllers = require('../controllers/clientcontroller');
 
 const routes = new Router();
 
-//routes.use(auth);
+routes.use(auth);
 //making order
-routes.post('/buy/:clientId/neworders',clientControllers.neworder);
+routes.post('/orders',clientControllers.neworder);
 
 //geting all orders
-routes.get('/get/:clientId/orders',clientControllers.getalloders);
+routes.get('/orders',clientControllers.getalloders);
 
 //getingsingle order
-routes.get('/get/:clientId/orders/:orderId',clientControllers.getsingleorder);
+routes.get('/orders/:orderId',clientControllers.getsingleorder);
+
+//update information
+routes.put('/updates',clientControllers.updateinfo)
+
+//update password
+routes.put('/password',clientControllers.updatepassword)
+
+//get user info
+routes.get('/profile',clientControllers.userinfo)
+
 
 module.exports = routes;

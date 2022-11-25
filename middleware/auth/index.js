@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
             })
         }
 
-        req.userid = decoded.id;
+        req.userId = decoded.id;
         //console.log('UserID', decoded.id);
         next();
     });

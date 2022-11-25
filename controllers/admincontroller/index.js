@@ -1,9 +1,8 @@
-const { response } = require('express');
 const {updateSchema,itemsSchema} =require('./../../config/shemas');
 const adminModel = require('./../../model/adminmodel');
 
  exports.updatingproducts= async (req, res) => {
-    const userId = req.params.userId;
+    const userId = req.userId;
     const productId = req.params.itemsId;
     const productInfo = req.body;
     
@@ -13,7 +12,7 @@ const adminModel = require('./../../model/adminmodel');
         
     } catch (error) {
         console.log(error);
-        return res.status(400).json(error.message)
+        return res.status(400).json({messageError:error.message})
     }
     //console.log(validatedInfo)
     const updatedItem = await adminModel.updateItem(userId, productId,productInfo);
@@ -28,7 +27,7 @@ const adminModel = require('./../../model/adminmodel');
 }
 
 exports.createproduct = async (req,res)=>{
-    const userId = req.params.userId;
+    const userId = req.userId;
     const productInfo = req.body;
 
     try {
@@ -36,7 +35,7 @@ exports.createproduct = async (req,res)=>{
         
     } catch (error) {
         console.log(error);
-        return res.status(400).json(error.message);
+        return res.status(400).json({messageError:error.message});
     }
 
     const product = await adminModel.createProduct(userId,productInfo);
@@ -44,7 +43,7 @@ exports.createproduct = async (req,res)=>{
     if (typeof(product)=="object") {
         res.status(200).json(product);
     }else{
-        res.status(500).json({message: product});
+        res.status(500).json({messageError: product});
     }
 
 

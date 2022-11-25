@@ -12,7 +12,7 @@ exports.login = async (req,res)=>{
         
     } catch (error) {
         console.log(error);
-         return res.status(400).json(error.message);
+         return res.status(400).json({messageError:error.message});
     }
     
     //email verification
@@ -20,14 +20,14 @@ exports.login = async (req,res)=>{
     
     //return messege if email not found
     if(!emailcheck){
-        return res.status(404).json("Email not found!");
+        return res.status(404).json({messageError:"Email not found!"});
     }
 
     //password verification
     const passwordcheck = await userValidation.passwordValidation(email,password);
 
     if(!passwordcheck){
-        return res.status(400).json("Password Invalid!");
+        return res.status(400).json({messageError:"Password Invalid!"});
     }
 
     //geting user id
@@ -73,14 +73,12 @@ exports.adminlogin = async (req,res)=>{
         return res.status(400).json({messageError:"Password Invalid!"});
     }
 
-    
-
     //geting user id
-    const user = await userModel.userID(email);
+    const userId = await userModel.userID(email);
 
     //responding whith the user info and token
     res.status(202).json({
-        userinfo:user,
-        token:jwt.sign({ id:user.id},process.env.AUTH_KEY ,{expiresIn: '1d'})
+        userinfo:userId,
+        token:jwt.sign({ id:userId.id},process.env.AUTH_KEY ,{expiresIn: '1d'})
     });
 }

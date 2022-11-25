@@ -13,17 +13,17 @@ exports.createuser = async (req,res)=>{
         
     } catch (error) {
         console.log(error);
-        return res.status(400).json(error.message);
+        return res.status(400).json({messageError:error.message});
     }
     //email verification
     const emailcheck = await userValidation.emailValidation(email);
 
     if(emailcheck==true){
-        return res.status(400).json("Email Alredy Exist!");
+        return res.status(400).json({messageError:"Email Alredy Exist!"});
     }
     //user creation
     const newuser = await userModel.createuser(first_name,last_name,email,password,birth,phone,adress);
-    console.log(newuser);
+    //console.log(newuser);
     //console.log(newuser);
     res.status(201).json(newuser);
 }

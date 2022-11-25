@@ -5,8 +5,8 @@ const clientModel = require('./../../model/clientmodel');
 
 exports.neworder = async (req,res) =>{
     //geting userID
-    const userId =req.params.clientId;
-    //console.log(userID);
+    const userId =req.userId;
+    //console.log(userId);
     const order = req.body;
     const orderlength = Object.keys(order).length;
     
@@ -23,7 +23,7 @@ exports.neworder = async (req,res) =>{
     try { 
     //insert the data into the orders
     const neworder = await clientModel.neworder(userId,order);
-    console.log(neworder)
+    //console.log(neworder)
 
     //error message more accurate
     if (typeof(neworder)=="object") {
@@ -54,14 +54,54 @@ exports.getsingleorder = async (req,res)=>{
 
 
 exports.getalloders = async (req,res)=>{
-    const userId=req.params.clientId;
+    const userId=req.userId;
     
     const orders = await clientModel.getAllOrders(userId);
-    console.log("controllers: " + orders)
+    //console.log("controllers: " + orders)
     if (typeof(orders)=="object") {
         res.status(200).json(orders);
     }else{
         res.status(400).json({messageError:orders});
     }
 
+}
+
+exports.userinfo = async (req,res) =>{
+    const userId=req.userId;
+
+    const userInformation = await clientModel.userInformation(userId);
+
+    if (typeof(userInformation)=="object") {
+        res.status(200).json(userId);
+    }else{
+        res.status(400).json({messageError:userInformation});
+    }
+    
+}
+
+exports.updateinfo = async (req,res) =>{
+    const userId=req.userId;
+    const {first_name,last_name,email,adress,birth,phone} = req.body;
+    
+    const updateInformation = await clientModel.updateInfo(first_name,last_name,email,adress,birth,phone,userId);
+
+    if (typeof(updateInformation)=="object") {
+        res.status(200).json(updateInformation);
+    }else{
+        res.status(400).json({messageError:updateInformation});
+    }
+    
+}
+
+exports.updatepassword = async (req,res) =>{
+    const userId=req.userId;
+    const {old_password,new_password} = req.body;
+
+    const updatePassword = await clientModel.updatePassword(old_password,new_password,userId);
+    
+    if (typeof(updatePassword)=="object") {
+        res.status(200).json(updatePassword);
+    }else{
+        res.status(400).json({messageError:updatePassword});
+    }
 }

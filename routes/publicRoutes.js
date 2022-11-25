@@ -7,12 +7,15 @@ const loginControllers = require('./../controllers/logincontroller');
 const routes = new Router();
 
 //geting all itens for home page
-routes.get('/get/items',publicControllers.getitems);
+routes.get('/items',publicControllers.getitems);
 
 //creating new users
-routes.post('/sign',userControllers.createuser);
+routes.post('/users',userControllers.createuser);
 
 //user login
-routes.post('/login',loginControllers.login);
+routes.post('/session',loginControllers.login);
+
+//admin login
+routes.post('/admin/session',loginControllers.adminlogin);
 
 module.exports = routes;
