@@ -7,7 +7,7 @@ const loginControllers = require('./../controllers/logincontroller');
 const routes = new Router();
 
 //geting all itens for home page
-routes.get('/items',publicControllers.getitems);
+routes.get('/items',publicControllers.getItems);
 
 //creating new users
 routes.post('/users',userControllers.createuser);

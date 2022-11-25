@@ -72,6 +72,42 @@ class adminModel {
 
     }
 
-}
+    
+    static async updateStatus(orderId,statusId){
+        try {
+            const isOrder= await db.query("SELECT * FROM orders WHERE id=$1",[orderId]);
 
+            if (!isOrder.rows[0]) {
+                const message = "Order not found";
+                return message;
+            }
+
+            const isStatus = await db.query("SELECT * from orders_status WHERE id=$1",[statusId]);
+            if (!isStatus.rows[0]) {
+                const message = "Status not found";
+                return message;
+            }
+
+            await db.query("UPDATE orders SET status_id=$1 WHERE id=$2",[statusId,orderId]);
+            const message = {message:`Order ${orderId} status updated`}
+            return message
+        } catch (error) {
+            console.log(error);
+            return error.message;
+        }
+    }
+    
+    static async getAllOrders(){
+        try {
+            const orders = await db.query("SELECT orders.id AS id,orders.user_id as Client_id,orders.total AS total,orders.date AS date,orders_status.status FROM orders,orders_status WHERE orders.status_id=orders_status.id ");
+            
+            return orders.rows;
+        } catch (error) {
+            console.log(error);
+
+            return error.message;
+        }
+    }
+    
+}
 module.exports = adminModel;

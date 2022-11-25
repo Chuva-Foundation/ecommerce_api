@@ -4,13 +4,14 @@ const bcrypt = require('bcrypt');
 class clientModel  {
 //seting new order
 static async neworder(clienteId,order){
-    //console.log(order)
+    
     const length = Object.keys(order).length;
     
     //validate if products exist and if it is available 
+    
     for (let x = 0; x <length; x++) { 
         const {product_id} = order[x];
-        //console.log(product_id)
+        
         try {
             //validate if product exists
             const productExist = await db.query("SELECT name FROM products WHERE id=$1",[product_id]);
@@ -37,7 +38,7 @@ static async neworder(clienteId,order){
         const price = quantity * Number(price_unit)
         totalPrice += price 
     }
-    //console.log("finalprice "+totalPrice);
+    
     //inserting all products  
     try {  
         await db.query('BEGIN')
@@ -46,15 +47,14 @@ static async neworder(clienteId,order){
         //inserting products
         for (let y = 0; y < length; y++){
             const {product_id,quantity,price_unit} = order[y];
-            //console.log(products)
-            //const productIdCategory = await db.query("SELECT id FROM category WHERE id = $1", []);
+            
             //inserting the products ordered by user
             await db.query("INSERT INTO order_products(order_id, product_id,quantity,price_unit) VALUES ($1, $2, $3, $4)", [orderId.rows[0].id,product_id,quantity,price_unit]);
 
         }
         await db.query('COMMIT');
         const newOrder = await db.query('SELECT  * FROM orders WHERE id=$1',[orderId.rows[0].id])
-       // console.log(newOrder.rows)
+       
         return newOrder.rows;
     } catch (error) {
             console.log(error)
@@ -65,7 +65,7 @@ static async neworder(clienteId,order){
 //geting single order
 static async getSingleOrder(orderId){
     try {
-        //const products =[];
+        
         const order = await db.query("SELECT product_id,quantity,price_unit FROM order_products WHERE order_id=$1",[orderId]);
         
         if (!order.rows[0]) {
@@ -82,7 +82,7 @@ static async getSingleOrder(orderId){
 static async getAllOrders(userId){
     
     try {
-        const orders = await db.query("SELECT id,total,date,status_id FROM orders WHERE user_id=$1",[userId]);
+        const orders = await db.query("SELECT orders.id AS id,orders.total AS total,orders.date AS date,orders_status.status FROM orders,orders_status WHERE orders.status_id=orders_status.id AND orders.user_id=$1",[userId]);
         
         if (!orders.rows[0]) {
            return "Order does not exist!" 
@@ -139,10 +139,75 @@ static async updatePassword(old_password, new_password,userId){
         console.log(error);
         return error.message;
     }
+}
 
-    
+static async ratingProduct(clientId, userRating,productId){
+
+    try {
+        const product = await db.query("SELECT name FROM products WHERE id=$1",[productId]);
+        
+        if (!product.rows[0]) {
+            const message = `Product ${productId} does not exist!`
+            return message
+        }
+    } catch (error) {
+        console.log(error);
+        return error.message;
+    }
+
+    try {
+        const isRated = await db.query("SELECT rating FROM ratings WHERE user_id=$1 and product_id=$2",[clientId,productId]);
+        
+        if (!isRated.rows[0]) {
+            await db.query("INSERT INTO ratings VALUES ($1, $2, $3)",[userRating,clientId,productId]);
+            const message = {message:"Product Rated whith Success!"};
+            return message;
+
+        }else{
+            await db.query("UPDATE ratings SET rating = $1 WHERE user_id=$2 AND product_id=$3",[userRating,clientId,productId])
+            const message = {message:"Product Rate Updated!"};
+            return message;
+        }
+    } catch (error) {
+        console.log(error);
+        return error.message;
+    }
+}
 
 
+static async cancelOrder(orderId,clientId) {
+    try {
+        
+        const order = await db.query("SELECT * FROM orders WHERE id=$1",[orderId]);
+        
+        if (!order.rows[0]) {
+            const message = "Order does not exist!";
+            return message;
+        }
+
+        const orderStatus = await db.query("SELECT status_id FROM orders WHERE user_id=$1",[clientId]);
+        
+        if (orderStatus.rows[0].status_id==202 || orderStatus.rows[0].status_id==307) {
+            const message = "This Order is in Deliver or alredy Complete!";
+
+            return message;
+        }
+
+        const isClientOrder = await db.query("SELECT user_id FROM orders WHERE id=$1",[orderId]);
+     
+        if (isClientOrder.rows[0].user_id != clientId) {
+            const message = "This order cannot be canceled";
+            return message;
+        }
+        await db.query("UPDATE orders SET status_id=400 WHERE id=$1",[orderId]);
+
+        const message = {message:`Order ${orderId} Cancelled!`}
+        return message;
+        
+    } catch (error) {
+        console.log(error)
+        return error.message;
+    }
 }
 }
 module.exports = clientModel;

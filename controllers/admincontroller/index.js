@@ -1,7 +1,7 @@
 const {updateSchema,itemsSchema} =require('./../../config/shemas');
 const adminModel = require('./../../model/adminmodel');
 
- exports.updatingproducts= async (req, res) => {
+ exports.updatingProducts= async (req, res) => {
     const userId = req.userId;
     const productId = req.params.itemsId;
     const productInfo = req.body;
@@ -26,7 +26,7 @@ const adminModel = require('./../../model/adminmodel');
 
 }
 
-exports.createproduct = async (req,res)=>{
+exports.createProduct = async (req,res)=>{
     const userId = req.userId;
     const productInfo = req.body;
 
@@ -48,3 +48,25 @@ exports.createproduct = async (req,res)=>{
 
 
 }
+
+exports.updateOrderStatus = async (req,res)=>{
+    //const userId = req.userId;
+    const {status_id,order_id} =req.body;
+
+    const changeStatus = await adminModel.updateStatus(order_id,status_id);
+
+    if (typeof(changeStatus)=="object") {
+        
+        res.status(200).json(changeStatus);
+    }else{
+        res.status(404).json(changeStatus);
+    }
+}
+
+exports.getOrders = async (req,res) => {
+
+        const orders = await adminModel.getAllOrders();
+
+        res.status(200).json(orders);
+}
+    

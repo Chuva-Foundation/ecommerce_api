@@ -6,22 +6,28 @@ const routes = new Router();
 
 routes.use(auth);
 //making order
-routes.post('/orders',clientControllers.neworder);
+routes.post('/orders',clientControllers.newOrder);
 
 //geting all orders
-routes.get('/orders',clientControllers.getalloders);
+routes.get('/orders',clientControllers.getallOrders);
 
 //getingsingle order
-routes.get('/orders/:orderId',clientControllers.getsingleorder);
+routes.get('/orders/:orderId',clientControllers.getsingleOrder);
 
 //update information
-routes.put('/updates',clientControllers.updateinfo)
+routes.put('/updates',clientControllers.updateInfo)
 
 //update password
-routes.put('/password',clientControllers.updatepassword)
+routes.put('/password',clientControllers.updatePassword)
 
 //get user info
-routes.get('/profile',clientControllers.userinfo)
+routes.get('/profile',clientControllers.userInfo)
+
+//rating products
+routes.post('/rate',clientControllers.productsRate)
+
+//cancelOrder
+routes.post('/cancel/order',clientControllers.cancelOrder)
 
 
 module.exports = routes;

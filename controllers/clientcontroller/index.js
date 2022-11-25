@@ -1,12 +1,11 @@
 
-const {orderSchema} =require('./../../config/shemas');
+const {orderSchema} = require('./../../config/shemas');
 const clientModel = require('./../../model/clientmodel');
 
 
-exports.neworder = async (req,res) =>{
+exports.newOrder = async (req,res) =>{
     //geting userID
     const userId =req.userId;
-    //console.log(userId);
     const order = req.body;
     const orderlength = Object.keys(order).length;
     
@@ -23,37 +22,33 @@ exports.neworder = async (req,res) =>{
     try { 
     //insert the data into the orders
     const neworder = await clientModel.neworder(userId,order);
-    //console.log(neworder)
 
-    //error message more accurate
     if (typeof(neworder)=="object") {
         res.status(200).json(neworder);
     }else{
-        res.status(400).json({messageError:neworder});
+        res.status(404).json({messageError:neworder});
     }
 
     } catch (error) {
     console.log(error)
     }
 
-}
+};
 //
-exports.getsingleorder = async (req,res)=>{
+exports.getsingleOrder = async (req,res)=>{
     const orderId =req.params.orderId;
-    
-    //console.log(orderId)
 
     const  getSingleOrder = await clientModel.getSingleOrder(orderId)
-    //console.log(typeof(getSingleOrder))
+
     if (typeof(getSingleOrder)=="object") {
         res.status(200).json(getSingleOrder);
     }else{
         res.status(400).json({ messageError:getSingleOrder});
     }
-}
+};
 
 
-exports.getalloders = async (req,res)=>{
+exports.getallOrders = async (req,res)=>{
     const userId=req.userId;
     
     const orders = await clientModel.getAllOrders(userId);
@@ -64,9 +59,9 @@ exports.getalloders = async (req,res)=>{
         res.status(400).json({messageError:orders});
     }
 
-}
+};
 
-exports.userinfo = async (req,res) =>{
+exports.userInfo = async (req,res) =>{
     const userId=req.userId;
 
     const userInformation = await clientModel.userInformation(userId);
@@ -77,9 +72,9 @@ exports.userinfo = async (req,res) =>{
         res.status(400).json({messageError:userInformation});
     }
     
-}
+};
 
-exports.updateinfo = async (req,res) =>{
+exports.updateInfo = async (req,res) =>{
     const userId=req.userId;
     const {first_name,last_name,email,adress,birth,phone} = req.body;
     
@@ -91,11 +86,15 @@ exports.updateinfo = async (req,res) =>{
         res.status(400).json({messageError:updateInformation});
     }
     
-}
+};
 
-exports.updatepassword = async (req,res) =>{
+exports.updatePassword = async (req,res) =>{
     const userId=req.userId;
     const {old_password,new_password} = req.body;
+
+    if (!old_password ||!new_password) {
+        return res.status(400).json({messageError:"Please enter a password"});
+    }
 
     const updatePassword = await clientModel.updatePassword(old_password,new_password,userId);
     
@@ -104,4 +103,39 @@ exports.updatepassword = async (req,res) =>{
     }else{
         res.status(400).json({messageError:updatePassword});
     }
-}
+};
+
+exports.productsRate = async (req,res) => {
+    const clientId=req.userId
+
+    const {client_rating,product_id} = req.body
+
+    
+    const ratingProduct = await clientModel.ratingProduct(clientId, client_rating,product_id);
+     
+    if (typeof(ratingProduct)=="object"){
+        res.status(200).json(ratingProduct);
+    }else{
+        res.status(400).json({messageError:ratingProduct});
+    }
+
+};
+
+ exports.cancelOrder = async (req,res) => {
+     const clientId = req.userId;
+     const {order_id} = req.body;
+
+     if (!order_id) {
+        return res.status(404).json({messageError:"Please enter a valid order!"})
+     }
+
+     const cancelOrder = await clientModel.cancelOrder(order_id,clientId);
+
+     if (typeof(cancelOrder)=="object") {
+        res.status(200).json(cancelOrder);
+
+     }else{
+        res.status(404).json({messageError:cancelOrder});
+     }
+
+ };
