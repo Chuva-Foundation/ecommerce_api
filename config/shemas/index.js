@@ -95,3 +95,49 @@ exports.itemsSchema = Joi.object({
         
         
 });
+
+exports.cancelOrderSchema = Joi.object({ order_id: Joi.number().required().positive()});
+
+exports.productRateSchema = Joi.object({
+    client_rating: Joi.number().required().positive(),
+    product_id: Joi.number().required().positive()
+});
+
+exports.changePasswordSchema = Joi.object({
+    old_password:Joi.string()
+        .required()
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+        .required(),
+    new_password:Joi.string()
+    .required()
+    .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+    .required()
+})
+
+exports.updateProfileSchema = Joi.object({
+    first_name: Joi.string()
+        .min(3)
+        .max(20)
+        .required(),
+    last_name: Joi.string()
+        .min(3)
+        .max(20)
+        .required(),
+    email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net','cv'] } })
+        .required()
+        .max(30),
+    birth:Joi.date()
+        .min('1-1-1920')
+        .required(),
+    phone: Joi.number()
+        .required()
+        .min(6),
+    adress: Joi.string()
+        .required()
+        .max(200) 
+})
+exports.orderStatusUpdateSchema=Joi.object({
+    order_id: Joi.number().required(),
+    status_id:Joi.number().required()
+});

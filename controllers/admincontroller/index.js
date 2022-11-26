@@ -1,11 +1,11 @@
-const {updateSchema,itemsSchema} =require('./../../config/shemas');
+const { restart } = require('nodemon');
+const {updateSchema,itemsSchema,orderStatusUpdateSchema} =require('./../../config/shemas');
 const adminModel = require('./../../model/adminmodel');
 
  exports.updatingProducts= async (req, res) => {
     const userId = req.userId;
     const productId = req.params.itemsId;
     const productInfo = req.body;
-    
     //validating schema
     try {
          await updateSchema.validateAsync(productInfo);
@@ -23,7 +23,6 @@ const adminModel = require('./../../model/adminmodel');
         res.status(500).json({messageError:updatedItem});
 
     }
-
 }
 
 exports.createProduct = async (req,res)=>{
@@ -45,15 +44,20 @@ exports.createProduct = async (req,res)=>{
     }else{
         res.status(500).json({messageError: product});
     }
-
-
 }
 
 exports.updateOrderStatus = async (req,res)=>{
-    //const userId = req.userId;
+    const userId = req.userId;
     const {status_id,order_id} =req.body;
 
-    const changeStatus = await adminModel.updateStatus(order_id,status_id);
+    try {
+        await orderStatusUpdateSchema.validateAsync(req.body);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({errorMessage:error.message});
+    }
+
+    const changeStatus = await adminModel.updateStatus(order_id,status_id,userId);
 
     if (typeof(changeStatus)=="object") {
         
@@ -64,9 +68,15 @@ exports.updateOrderStatus = async (req,res)=>{
 }
 
 exports.getOrders = async (req,res) => {
+        const userId = req.body.userId;
 
-        const orders = await adminModel.getAllOrders();
+        const orders = await adminModel.getAllOrders(userId);
 
-        res.status(200).json(orders);
+        if (typeof(orders)=="object") {
+        
+            res.status(200).json(orders);
+        }else{
+            res.status(400).json(orders);
+        }
 }
     

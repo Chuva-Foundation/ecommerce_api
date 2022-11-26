@@ -1,5 +1,6 @@
 
-const {orderSchema} = require('./../../config/shemas');
+const { json } = require('express');
+const {orderSchema,cancelOrderSchema,productRateSchema,changePasswordSchema, updateProfileSchema} = require('./../../config/shemas');
 const clientModel = require('./../../model/clientmodel');
 
 
@@ -77,6 +78,13 @@ exports.userInfo = async (req,res) =>{
 exports.updateInfo = async (req,res) =>{
     const userId=req.userId;
     const {first_name,last_name,email,adress,birth,phone} = req.body;
+
+    try {
+        await updateProfileSchema.validateAsync(req.body);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({messageError:error.message});
+    }
     
     const updateInformation = await clientModel.updateInfo(first_name,last_name,email,adress,birth,phone,userId);
 
@@ -92,10 +100,13 @@ exports.updatePassword = async (req,res) =>{
     const userId=req.userId;
     const {old_password,new_password} = req.body;
 
-    if (!old_password ||!new_password) {
-        return res.status(400).json({messageError:"Please enter a password"});
+    
+    try {
+        await changePasswordSchema.validateAsync(req.body);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({messageError:error.message});
     }
-
     const updatePassword = await clientModel.updatePassword(old_password,new_password,userId);
     
     if (typeof(updatePassword)=="object") {
@@ -106,9 +117,16 @@ exports.updatePassword = async (req,res) =>{
 };
 
 exports.productsRate = async (req,res) => {
-    const clientId=req.userId
+    const clientId=req.userId;
 
-    const {client_rating,product_id} = req.body
+    const {client_rating,product_id} = req.body;
+
+    try {
+        await productRateSchema.validateAsync(req.body);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({messageError: error.message});
+    }
 
     
     const ratingProduct = await clientModel.ratingProduct(clientId, client_rating,product_id);
@@ -125,8 +143,12 @@ exports.productsRate = async (req,res) => {
      const clientId = req.userId;
      const {order_id} = req.body;
 
-     if (!order_id) {
-        return res.status(404).json({messageError:"Please enter a valid order!"})
+
+     try {
+        await cancelOrderSchema.validateAsync(req.body);
+     } catch (error) {
+        console.log(error);
+        return  res.status(400).json({messageError:error.message});
      }
 
      const cancelOrder = await clientModel.cancelOrder(order_id,clientId);
