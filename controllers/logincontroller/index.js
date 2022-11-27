@@ -75,7 +75,7 @@ exports.adminlogin = async (req,res)=>{
 
     //geting user id
     const userId = await userModel.userID(email);
-
+    console.log(userId)
     //responding whith the user info and token
     res.status(202).json({
         userinfo:userId,

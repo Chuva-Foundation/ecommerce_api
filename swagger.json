@@ -1,0 +1,20 @@
+{
+    "openapi":"3.0.0",
+    "info":{
+        "title":"E-comerce API",
+        "description":"This is an prototipe API for a ecomerce application for Chuva Academy final project.",
+        "contact":{
+            "email":"j.almeidacv@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt"
+            },
+        "version":"1.0.0"
+    },
+    "servers":[{
+        "url":"http://localhost:PORT/",
+        "description":"This api will run in localhost.No default PORT set, must provide one."
+    }]
+    
+}

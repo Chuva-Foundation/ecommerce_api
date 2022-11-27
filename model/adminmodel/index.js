@@ -74,7 +74,7 @@ class adminModel {
 
     
     static async updateStatus(orderId,statusId,userId){
-        console.log(userId)
+        
         try {
             //validating user authorization
             const isAdmin = await db.query("SELECT isadmin FROM users WHERE id = $1",[userId]);
@@ -105,14 +105,10 @@ class adminModel {
         }
     }
     
-    static async getAllOrders(userId){
+    static async getAllOrders(){
         try {
             //validating user authorization
-            const isAdmin = await db.query("SELECT isadmin FROM users WHERE id = $1",[userId]);
-            if (isAdmin.rows[0].isadmin==false) {
-                const message = "You are not allowed to perfom this action!"
-                return message;
-            }
+           
             const orders = await db.query("SELECT orders.id AS id,orders.user_id as Client_id,orders.total AS total,orders.date AS date,orders_status.status FROM orders,orders_status WHERE orders.status_id=orders_status.id ");
             
             return orders.rows;

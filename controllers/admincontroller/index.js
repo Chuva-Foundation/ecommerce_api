@@ -68,9 +68,9 @@ exports.updateOrderStatus = async (req,res)=>{
 }
 
 exports.getOrders = async (req,res) => {
-        const userId = req.body.userId;
-
-        const orders = await adminModel.getAllOrders(userId);
+        //const userId = req.body.userId;
+        const orders = await adminModel.getAllOrders();
+       
 
         if (typeof(orders)=="object") {
         
