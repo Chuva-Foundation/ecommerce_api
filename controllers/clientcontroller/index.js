@@ -68,7 +68,7 @@ exports.userInfo = async (req,res) =>{
     const userInformation = await clientModel.userInformation(userId);
 
     if (typeof(userInformation)=="object") {
-        res.status(200).json(userId);
+        res.status(200).json(userInformation);
     }else{
         res.status(400).json({messageError:userInformation});
     }
