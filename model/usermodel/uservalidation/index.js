@@ -45,6 +45,12 @@ class userValidation {
             return true;
         }
     }
+
+    static async isActivated(email){
+        const isActivated = await db.query("SELECT is_active FROM users WHERE email=$1",[email]);
+
+        return isActivated.rows[0].is_active;
+    }
 }
 
 module.exports = userValidation;

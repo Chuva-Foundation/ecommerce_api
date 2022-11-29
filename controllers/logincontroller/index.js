@@ -17,19 +17,24 @@ exports.login = async (req,res)=>{
     
     //email verification
     const emailcheck = await userValidation.emailValidation(email);
-    
     //return messege if email not found
     if(!emailcheck){
         return res.status(404).json({messageError:"Email not found!"});
     }
+/*
+    //validate is account is activate
+    const isActive = await userValidation.isActivated(email);
 
+    if (isActive==false) {
+        res.status(400).json({messageError:"Please activate your account!"})
+    }
+    */
     //password verification
     const passwordcheck = await userValidation.passwordValidation(email,password);
 
     if(!passwordcheck){
         return res.status(400).json({messageError:"Password Invalid!"});
     }
-
     //geting user id
     const user = await userModel.userID(email);
 

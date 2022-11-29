@@ -11,9 +11,9 @@ class userModel {
             await db.query("BEGIN");
             const userId = await db.query("INSERT INTO users (first_name,last_name,email,password,birth,adress) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id",[first_name,last_name,email,passwordhash,birth,adress]);
             await db.query("INSERT INTO phones (phone_number,user_id) VALUES ($1,$2)",[phone,userId.rows[0].id]);
-            const userInfo = await db.query("SELECT id,first_name,last_name from users WHERE id=$1",[userId.rows[0].id]);
+            await db.query("SELECT id,first_name,last_name from users WHERE id=$1",[userId.rows[0].id]);
             await db.query("COMMIT");
-            return userInfo.rows[0]; 
+            return userId.rows[0]; 
         } catch (error) {
             console.log(error);
             await db.query("ROLLBACK");

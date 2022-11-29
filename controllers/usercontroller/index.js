@@ -23,9 +23,11 @@ exports.createuser = async (req,res)=>{
     }
     //user creation
     const newuser = await userModel.createuser(first_name,last_name,email,password,birth,phone,adress);
-    //console.log(newuser);
-    //console.log(newuser);
-    res.status(201).json(newuser);
+    
+    res.status(201).json({
+        "userId":newuser,
+        "message":"Your Account has been created successfully, please acivate in the email!"
+    });
 }
 
 

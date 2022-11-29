@@ -18,4 +18,5 @@ routes.post('/session',loginControllers.login);
 //admin login
 routes.post('/admin/session',loginControllers.adminlogin);
 
+
 module.exports = routes;

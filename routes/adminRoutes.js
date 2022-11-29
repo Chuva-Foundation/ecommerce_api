@@ -16,10 +16,10 @@ routes.post("/admin/create",adminControllers.createProduct);
 routes.put('/admin/update/:itemsId',adminControllers.updatingProducts);
 
 //updating order status
-routes.put('/admin/orderstatus',adminControllers.updateOrderStatus )
+routes.put('/admin/orderstatus',adminControllers.updateOrderStatus );
 
 //get all orders
-routes.get('/admin/orders',adminControllers.getOrders)
+routes.get('/admin/orders',adminControllers.getOrders);
 
 
 

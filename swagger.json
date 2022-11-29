@@ -15,6 +15,117 @@
     "servers":[{
         "url":"http://localhost:PORT/",
         "description":"This api will run in localhost.No default PORT set, must provide one."
-    }]
+    }],
+    "paths": {
+        "/items":{
+            "get":{
+                "tags":[
+                    "Store Items"
+                ],
+                "summary":"Get all Items in store",
+                "description":"List of All products in array that contain all items information in  Json format",
+                "produces":[
+                    "application/json"
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Success geting all items in store"
+                    }
+                }
+
+            }
+        },
+        "/users":{
+            "post":{
+                "tags":[
+                    "Users"
+                ],
+                "summary":"Create new client",
+                "description":"Create new user for the store, all information must go in json format",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"body",
+                        "name":"body",
+                        "description":"create user object",
+                        "require":true,
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                            "first_name":{
+                                "type":"string"
+                            },
+	                        "last_name":{
+                                "type":"string"
+                            },
+	                        "email":{
+                                "type":"string"
+                            },
+	                        "password":{
+                                "type":"string"
+                            },
+	                        "birth":{
+                                "type":"date"
+                            },
+	                        "phone":{
+                                "type":"integer",
+                                "format":"int64"
+                            },
+	                        "adress":{
+                                "type":"string"
+                            }
+                            }
+                        }
+                    }
+                    
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Success in creating a new user and will return some user information"
+                    },
+                    "400":{
+                        "description":"Fail in creating a user"
+                    }   
+                }
+            
+            }
+        },
+        "/session":{
+            "post":{
+                "tags":[
+                    "Users"
+                ],
+                "summary":"User Login",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"Email",
+                        "type":"string",
+                        "required":true
+                    },
+                    {
+                        "name":"password",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Success login"
+                    },
+                    "400":{
+                        "description":"Fail to login"
+                    }
+                }
+            }
+        } 
     
+    }
 }
