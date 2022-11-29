@@ -4,7 +4,7 @@
   "description": "ecomerce api for chuva academy final project",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "start": "nodemon index.js"
   },
   "repository": {
@@ -27,5 +27,9 @@
     "nodemon": "^2.0.20",
     "pg": "^8.8.0",
     "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "supertest": "^6.3.1",
+    "jest": "^29.3.1"
   }
 }
