@@ -2,7 +2,6 @@ const db = require('./../../config/database');
 
 class adminModel {
     static async updateItem(userId,itemId,productsInfo){
-        //console.log("Productsinfo "+productsInfo)
         const {price,status} = productsInfo;
         try {
             //user validation
@@ -33,7 +32,6 @@ class adminModel {
             console.log(error);
             return error.message;
         }
-       
     }
 
     //creating items
@@ -69,10 +67,8 @@ class adminModel {
             console.log(error)
             return error.message;
         }
-
     }
 
-    
     static async updateStatus(orderId,statusId,userId){
         
         try {
@@ -105,12 +101,16 @@ class adminModel {
         }
     }
     
-    static async getAllOrders(){
+    static async getAllOrders(userId){
         try {
             //validating user authorization
-           
+            const isAdmin = await db.query("SELECT isadmin FROM users WHERE id = $1",[userId]);
+            if (isAdmin.rows[0].isadmin==false) {
+                const message = "You are not allowed to perfom this action!"
+                return message;
+            }
             const orders = await db.query("SELECT orders.id AS id,orders.user_id as Client_id,orders.total AS total,orders.date AS date,orders_status.status FROM orders,orders_status WHERE orders.status_id=orders_status.id ");
-            
+
             return orders.rows;
         } catch (error) {
             console.log(error);
@@ -119,4 +119,5 @@ class adminModel {
         }
     } 
 }
+
 module.exports = adminModel;

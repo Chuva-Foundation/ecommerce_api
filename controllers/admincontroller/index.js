@@ -1,5 +1,5 @@
 const { restart } = require('nodemon');
-const {updateSchema,itemsSchema,orderStatusUpdateSchema} =require('./../../config/shemas');
+const {updateSchema,itemsSchema} =require('./../../config/shemas');
 const adminModel = require('./../../model/adminmodel');
 
  exports.updatingProducts= async (req, res) => {
@@ -46,37 +46,5 @@ exports.createProduct = async (req,res)=>{
     }
 }
 
-exports.updateOrderStatus = async (req,res)=>{
-    const userId = req.userId;
-    const {status_id,order_id} =req.body;
 
-    try {
-        await orderStatusUpdateSchema.validateAsync(req.body);
-    } catch (error) {
-        console.log(error);
-        return res.status(400).json({errorMessage:error.message});
-    }
-
-    const changeStatus = await adminModel.updateStatus(order_id,status_id,userId);
-
-    if (typeof(changeStatus)=="object") {
-        
-        res.status(200).json(changeStatus);
-    }else{
-        res.status(404).json(changeStatus);
-    }
-}
-
-exports.getOrders = async (req,res) => {
-        //const userId = req.body.userId;
-        const orders = await adminModel.getAllOrders();
-       
-
-        if (typeof(orders)=="object") {
-        
-            res.status(200).json(orders);
-        }else{
-            res.status(400).json(orders);
-        }
-}
     

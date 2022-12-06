@@ -7,6 +7,7 @@ const swaggerDocument = require('./swagger.json');
 const adminRoutes = require('./routes/adminRoutes');
 const publicRoutes = require('./routes/publicRoutes');
 const clientRoutes = require('./routes/clientRoutes')
+const ordersRoutes = require('./routes/ordersRoutes');
 const port =process.env.PORT
 
 app.use(express.json());
@@ -24,7 +25,8 @@ app.use(clientRoutes);
 //admin routes
 app.use(adminRoutes);
 
-//private routes
+//order routes
+app.use(ordersRoutes);
 
 app.listen(port,()=>{
     console.log('Server Online',);

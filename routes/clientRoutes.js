@@ -5,14 +5,6 @@ const clientControllers = require('../controllers/clientcontroller');
 const routes = new Router();
 
 routes.use(auth);
-//making order
-routes.post('/orders',clientControllers.newOrder);
-
-//geting all orders
-routes.get('/orders',clientControllers.getallOrders);
-
-//getingsingle order
-routes.get('/orders/:orderId',clientControllers.getsingleOrder);
 
 //update information
 routes.put('/updates',clientControllers.updateInfo)
@@ -25,9 +17,5 @@ routes.get('/profile',clientControllers.userInfo)
 
 //rating products
 routes.post('/rate',clientControllers.productsRate)
-
-//cancelOrder
-routes.post('/cancel/order',clientControllers.cancelOrder)
-
 
 module.exports = routes;

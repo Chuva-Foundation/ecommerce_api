@@ -15,11 +15,7 @@ routes.post("/admin/create",adminControllers.createProduct);
 //updating products
 routes.put('/admin/update/:itemsId',adminControllers.updatingProducts);
 
-//updating order status
-routes.put('/admin/orderstatus',adminControllers.updateOrderStatus );
 
-//get all orders
-routes.get('/admin/orders',adminControllers.getOrders);
 
 
 
