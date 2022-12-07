@@ -1,7 +1,7 @@
 const db = require('./../../config/database');
 
 class adminModel {
-    static async updateItem(userId,itemId,productsInfo){
+    static async updateProduct(userId,itemId,productsInfo){
         const {price,status} = productsInfo;
         try {
             //user validation
@@ -34,7 +34,7 @@ class adminModel {
         }
     }
 
-    //creating items
+    
     static async createProduct(userId,productInfo){
         //console.log(productInfo)
         const {name,price,status,category_id} = productInfo;
@@ -69,7 +69,7 @@ class adminModel {
         }
     }
 
-    static async updateStatus(orderId,statusId,userId){
+    static async updateOrderStatus(orderId,statusId,userId){
         
         try {
             //validating user authorization
@@ -101,7 +101,7 @@ class adminModel {
         }
     }
     
-    static async getAllOrders(userId){
+    static async getAllUserOrders(userId){
         try {
             //validating user authorization
             const isAdmin = await db.query("SELECT isadmin FROM users WHERE id = $1",[userId]);

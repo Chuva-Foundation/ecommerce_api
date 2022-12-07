@@ -12,21 +12,21 @@ const port =process.env.PORT
 
 app.use(express.json());
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(cors());
 
 //public Routes
-app.use(publicRoutes);
+app.use('/api/v1',publicRoutes);
 
 //user Routes
-app.use(clientRoutes);
+app.use('/api/v1',clientRoutes);
 
 //admin routes
-app.use(adminRoutes);
+app.use('/api/v1',adminRoutes);
 
 //order routes
-app.use(ordersRoutes);
+app.use('/api/v1',ordersRoutes);
 
 app.listen(port,()=>{
     console.log('Server Online',);

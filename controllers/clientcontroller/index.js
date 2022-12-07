@@ -1,9 +1,7 @@
 
 const { json } = require('express');
-const {orderSchema,cancelOrderSchema,productRateSchema,changePasswordSchema, updateProfileSchema} = require('./../../config/shemas');
+const {productRateSchema,changePasswordSchema, updateProfileSchema} = require('./../../config/shemas');
 const clientModel = require('./../../model/clientmodel');
-
-
 
 exports.updateInfo = async (req,res) =>{
     const userId=req.userId;

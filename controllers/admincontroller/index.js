@@ -6,6 +6,7 @@ const adminModel = require('./../../model/adminmodel');
     const userId = req.userId;
     const productId = req.params.itemsId;
     const productInfo = req.body;
+    
     //validating schema
     try {
          await updateSchema.validateAsync(productInfo);
