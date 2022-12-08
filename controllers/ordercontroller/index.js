@@ -3,7 +3,7 @@ const orderModel = require('../../model/ordermodel')
 const adminModel = require('../../model/adminmodel');
 
 
-exports.newOrder = async (req,res) =>{
+exports.clientSetNewOrder = async (req,res) =>{
     //geting userID
     const userId =req.userId;
     const order = req.body;
@@ -35,7 +35,7 @@ exports.newOrder = async (req,res) =>{
 
 };
 //
-exports.getsingleOrder = async (req,res)=>{
+exports.clientGetSingleOrder = async (req,res)=>{
     const orderId =req.params.orderId;
 
     const  getSingleOrder = await orderModel.getSingleOrder(orderId)
@@ -47,7 +47,7 @@ exports.getsingleOrder = async (req,res)=>{
     }
 };
 
-exports.getallOrders = async (req,res)=>{
+exports.clientGetAllOrders = async (req,res)=>{
     const userId=req.userId;
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
@@ -68,7 +68,7 @@ exports.getallOrders = async (req,res)=>{
 
 };
 
-exports.cancelOrder = async (req,res) => {
+exports.clientCancelOrder = async (req,res) => {
     const clientId = req.userId;
     const {order_id} = req.body;
 
@@ -91,7 +91,7 @@ exports.cancelOrder = async (req,res) => {
 };
 
 
-exports.updateOrderStatus = async (req,res)=>{
+exports.AdminUpdateOrderStatus = async (req,res)=>{
     const userId = req.userId;
     const {status_id,order_id} =req.body;
 
@@ -102,7 +102,7 @@ exports.updateOrderStatus = async (req,res)=>{
         return res.status(400).json({errorMessage:error.message});
     }
 
-    const changeStatus = await adminModel.updateStatus(order_id,status_id,userId);
+    const changeStatus = await adminModel.updateOrderStatus(order_id,status_id,userId);
 
     if (typeof(changeStatus)=="object") {
         
@@ -112,14 +112,22 @@ exports.updateOrderStatus = async (req,res)=>{
     }
 }
 
-exports.getOrders = async (req,res) => {
-        const userId = req.userId;
-        const orders = await adminModel.getAllUserOrders(userId);
+exports.AdminGetOrders = async (req,res) => {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const offSet = (page-1) * limit;
+    const userId = req.userId;
+    const orders = await adminModel.getAllUserOrders(userId,limit,offSet);
+    const totalOrders = await adminModel.getTotalUserOrders(userId)
        
-        if (typeof(orders)=="object") {
+    if (typeof(orders)=="object") {
         
-            res.status(200).json(orders);
-        }else{
-            res.status(400).json(orders);
-        }
+        res.status(200).json({
+            "orders":orders,
+            "limit":limit,
+            "total":totalOrders
+        });
+    }else{
+        res.status(400).json(orders);
+    }
 }

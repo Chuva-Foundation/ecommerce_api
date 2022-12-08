@@ -6,22 +6,22 @@ const routes = new Router();
 
 routes.use(auth)
 //making order
-routes.post('/orders',ordersControllers.newOrder);
+routes.post('/orders',ordersControllers.clientSetNewOrder);
 
 //geting all orders
-routes.get('/orders',ordersControllers.getallOrders);
+routes.get('/orders',ordersControllers.clientGetAllOrders);
 
 //getingsingle order
-routes.get('/orders/:orderId',ordersControllers.getsingleOrder);
+routes.get('/orders/:orderId',ordersControllers.clientGetSingleOrder);
 
 //cancelOrder
-routes.post('/cancel/order',ordersControllers.cancelOrder);
+routes.post('/cancel/order',ordersControllers.clientCancelOrder);
 
 //updating order status
-routes.put('/admin/orderstatus',ordersControllers.updateOrderStatus );
+routes.put('/admin/orderstatus',ordersControllers.AdminUpdateOrderStatus );
 
 //get all orders
-routes.get('/admin/orders',ordersControllers.getOrders);
+routes.get('/admin/orders',ordersControllers.AdminGetOrders);
 
 
 module.exports = routes;

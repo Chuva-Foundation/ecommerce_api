@@ -101,7 +101,7 @@ class adminModel {
         }
     }
     
-    static async getAllUserOrders(userId){
+    static async getAllUserOrders(userId,limit,offSet){
         try {
             //validating user authorization
             const isAdmin = await db.query("SELECT isadmin FROM users WHERE id = $1",[userId]);
@@ -109,7 +109,7 @@ class adminModel {
                 const message = "You are not allowed to perfom this action!"
                 return message;
             }
-            const orders = await db.query("SELECT orders.id AS id,orders.user_id as Client_id,orders.total AS total,orders.date AS date,orders_status.status FROM orders,orders_status WHERE orders.status_id=orders_status.id ");
+            const orders = await db.query("SELECT orders.id AS id,orders.user_id as Client_id,orders.total AS total,orders.date AS date,orders_status.status FROM orders,orders_status WHERE orders.status_id=orders_status.id LIMIT $1 OFFSET $2",[limit,offSet]);
 
             return orders.rows;
         } catch (error) {
@@ -118,6 +118,22 @@ class adminModel {
             return error.message;
         }
     } 
+
+    static async getTotalUserOrders(userId){
+        try {
+            //validating user authorization
+            const isAdmin = await db.query("SELECT isadmin FROM users WHERE id = $1",[userId]);
+            if (isAdmin.rows[0].isadmin==false) {
+                const message = "You are not allowed to perfom this action!"
+                return message;
+            }
+            const ordersCount = await db.query("SELECT COUNT(*) FROM orders");
+            return ordersCount.rows[0].count;
+        } catch (error) {
+            console.log(error);
+            return error.message;
+        }
+    }
 }
 
 module.exports = adminModel;
