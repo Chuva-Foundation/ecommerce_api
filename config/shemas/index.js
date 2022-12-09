@@ -44,11 +44,6 @@ exports.loginSchema = Joi.object({
 });
 
 exports.orderSchema = Joi.object({
-    user_id: Joi.number().greater(0)
-        .integer()
-        .positive()
-        .required(),
-
     product_id: Joi.number()
         .integer()
         .positive()
@@ -56,12 +51,7 @@ exports.orderSchema = Joi.object({
     quantity: Joi.number().greater(0)
         .required()
         .positive()
-        .integer(),
-    price_unit: Joi.number().greater(0)
-        .required()
-        .positive()
-        .integer()
-          
+        .integer()     
 });
 
 exports.updateSchema = Joi.object({
