@@ -15,7 +15,7 @@ routes.get('/orders',ordersControllers.clientGetAllOrders);
 routes.get('/orders/:orderId',ordersControllers.clientGetSingleOrder);
 
 //cancelOrder
-routes.post('/cancel/order',ordersControllers.clientCancelOrder);
+routes.put('/cancel/order',ordersControllers.clientCancelOrder);
 
 //updating order status
 routes.put('/admin/orderstatus',ordersControllers.AdminUpdateOrderStatus );
